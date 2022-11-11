@@ -35,8 +35,8 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
             String messageText = update.message().text();
             Long chatId = update.message().chat().id();
             telegramBot.setUpdatesListener(up -> {
-                // Обрабатываем входящие сообщения
-                // возвращаем id последнего обработанного сообщения или отмечаем все как обработанные
+                // Обрабатываем входящие сообщения. Как?
+                // возвращаем id последнего обработанного сообщения или отмечаем все как обработанные. Как?
                 SendMessage message = new SendMessage(chatId, messageText);
                 SendResponse response = telegramBot.execute(message);
                 return UpdatesListener.CONFIRMED_UPDATES_ALL;

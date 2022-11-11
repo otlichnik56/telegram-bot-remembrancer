@@ -8,6 +8,5 @@ CREATE TABLE notification_task(
     dateTime    TIMESTAMP
 );
 
-<-- 123 -->
 
 
