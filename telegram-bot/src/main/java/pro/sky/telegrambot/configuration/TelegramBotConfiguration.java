@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class TelegramBotConfiguration {
-
+// токен лучше не вводить
     @Value("${telegram.bot.token}")
     private String token;
 

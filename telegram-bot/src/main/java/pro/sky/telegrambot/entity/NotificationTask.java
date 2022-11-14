@@ -12,9 +12,10 @@ public class NotificationTask {
     @Id
     @GeneratedValue
     private long id;
-    private String chatId;
+    private long chatId;
     private String message;
     private LocalDateTime dateTime;
+
 
     public long getId() {
         return id;
@@ -24,11 +25,11 @@ public class NotificationTask {
         this.id = id;
     }
 
-    public String getChatId() {
+    public long getChatId() {
         return chatId;
     }
 
-    public void setChatId(String chatId) {
+    public void setChatId(long chatId) {
         this.chatId = chatId;
     }
 
