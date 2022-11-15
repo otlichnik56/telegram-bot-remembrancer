@@ -42,16 +42,32 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     public int process(List<Update> updates) {
         updates.forEach(update -> {
             logger.info("Processing update: {}", update);
-            String messageText;
-            if(update.message().text().equals("/start")) {
-                messageText = "Приветстую! Я бот, который будет напоминать вам о делах. Например введите 01.01.2022 20:00 Сделать домашнюю работу. В 20:00 1 января 2022 года я пришлю вам напоминание с текстом “Сделать домашнюю работу” ";
+
+            if(update.message().text().startsWith("/")) {
+                String messageText;
+                if (update.message().text().equals("/start")) {
+                    messageText = "Приветстую! Я бот, который будет напоминать вам о делах. Например введите 01.01.2022 20:00 Сделать домашнюю работу. В 20:00 1 января 2022 года я пришлю вам напоминание с текстом “Сделать домашнюю работу” ";
+                } else {
+                    messageText = "Извините, но такую команду не знаю!";
+                }
+                SendMessage message = new SendMessage(update.message().chat().id(), messageText);
+                telegramBot.execute(message);
             } else {
-                messageText = "Извините, но такую команду не знаю!";
+                saveEntity(update);
             }
-            SendMessage message = new SendMessage(update.message().chat().id(), messageText);
-            telegramBot.execute(message);
         });
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
+    }
+
+    private void saveEntity(Update update) {
+        logger.info("Processing update: {}", update);
+        if(!(update.message().text() == null)) {
+            NotificationTask notificationTask = new NotificationTask();
+            notificationTask.setChatId(update.message().chat().id());
+            notificationTask.setMessage(parsingString(update.message().text()));
+            notificationTask.setDateTime(parsingDate(update.message().text()));
+            notificationTaskRepository.save(notificationTask);
+        }
     }
 
     private LocalDateTime parsingDate(String messageText) {
@@ -74,25 +90,5 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         return text;
     }
 
-    public void save(List<Update> updates) {
-        updates.forEach(update -> {
-            NotificationTask notificationTask = new NotificationTask();
-            notificationTask.setChatId(update.message().chat().id());
-            notificationTask.setMessage(parsingString(update.message().text()));
-            notificationTask.setDateTime(parsingDate(update.message().text()));
-            notificationTaskRepository.save(notificationTask);
-        });
-    }
-
-    @Scheduled(cron = "0 0/1 * * * *")
-    public void run() {
-        LocalDateTime localDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-        List<NotificationTask> result = notificationTaskRepository.getNotificationTaskNowDateTime(localDateTime);
-        if (!(result == null)){
-            for(NotificationTask notificationTask: result){
-
-            }
-        }
-    }
 
 }

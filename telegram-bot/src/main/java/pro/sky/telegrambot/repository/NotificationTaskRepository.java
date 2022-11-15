@@ -10,7 +10,7 @@ import java.util.List;
 
 public interface NotificationTaskRepository extends JpaRepository<NotificationTask, Long> {
 
-    @Query(value = "SELECT * FROM notification_task WHERE datetime = :localDateTime", nativeQuery = true)
+    @Query(value = "SELECT * FROM notification_task WHERE date_time = :localDateTime", nativeQuery = true)
     List<NotificationTask> getNotificationTaskNowDateTime(@Param("localDateTime") LocalDateTime localDateTime);
 
 }
