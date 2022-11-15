@@ -8,7 +8,9 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class TelegramBotConfiguration {
-// токен лучше не вводить
+
+    // Токен бота не оригинальный. Если хочется проверить работу бота, напишите мне, включу его.
+    // GitHub ругает, да и в общем это не безопасно!
     @Value("${telegram.bot.token}")
     private String token;
 

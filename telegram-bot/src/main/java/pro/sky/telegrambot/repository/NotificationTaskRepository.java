@@ -10,6 +10,7 @@ import java.util.List;
 
 public interface NotificationTaskRepository extends JpaRepository<NotificationTask, Long> {
 
+    // Ищет записи с текущей датой и временем исключая секунды и милисекунды
     @Query(value = "SELECT * FROM notification_task WHERE date_time = :localDateTime", nativeQuery = true)
     List<NotificationTask> getNotificationTaskNowDateTime(@Param("localDateTime") LocalDateTime localDateTime);
 

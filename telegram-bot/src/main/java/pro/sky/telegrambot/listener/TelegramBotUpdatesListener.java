@@ -6,7 +6,6 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.entity.NotificationTask;
@@ -23,14 +22,15 @@ import java.util.regex.Pattern;
 @Service
 public class TelegramBotUpdatesListener implements UpdatesListener {
 
-    private Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
+    private final Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
+    private final TelegramBot telegramBot;
     private final NotificationTaskRepository notificationTaskRepository;
 
-    @Autowired
-    private TelegramBot telegramBot;
 
-    public TelegramBotUpdatesListener(NotificationTaskRepository notificationTaskRepository) {
+    // Хотел порефачить код, но времени до сдачи почти нет, займусь этим потом!!!!! Главное всё работает!
+    public TelegramBotUpdatesListener(NotificationTaskRepository notificationTaskRepository, TelegramBot telegramBot) {
         this.notificationTaskRepository = notificationTaskRepository;
+        this.telegramBot = telegramBot;
     }
 
     @PostConstruct
@@ -71,9 +71,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         }
     }
 
-
-
-    // Сохраняет корректную запись в БД. При не корректном вводе отправляет сообщение "Запись введена не корректно"
+    // Сохраняет корректную запись в БД. При некорректном вводе отправляет сообщение "Запись введена не корректно"
     private void saveEntity(Update update) {
         logger.info("Processing update: {}", update);
         if(!(update.message().text() == null)) {

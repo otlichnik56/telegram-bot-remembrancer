@@ -1,3 +1,7 @@
+# Запускает запрос SQL table-work.sql
+
 databaseChangeLog:
   - include:
       file: liquibase/table-work.sql
+
+
