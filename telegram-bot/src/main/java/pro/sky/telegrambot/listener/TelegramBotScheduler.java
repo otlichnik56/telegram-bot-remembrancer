@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.entity.NotificationTask;
-import pro.sky.telegrambot.interfacetelegrambot.Scheduler;
 import pro.sky.telegrambot.repository.NotificationTaskRepository;
 
 import java.time.LocalDateTime;
@@ -15,7 +14,7 @@ import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
-public class TelegramBotScheduler implements Scheduler {
+public class TelegramBotScheduler{
 
     private final Logger logger = LoggerFactory.getLogger(TelegramBotScheduler.class);
     private final TelegramBot telegramBot;

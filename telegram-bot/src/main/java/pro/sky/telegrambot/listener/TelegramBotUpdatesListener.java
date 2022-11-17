@@ -42,14 +42,7 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
             logger.info("Processing update: {}", update);
 
             if(update.message().text().startsWith("/")) {
-                String messageText;
-                if (update.message().text().equals("/start")) {
-                    messageText = "Приветстую! Я бот, который будет напоминать вам о делах. Например введите 01.01.2022 20:00 Сделать домашнюю работу. В 20:00 1 января 2022 года я пришлю вам напоминание с текстом “Сделать домашнюю работу” ";
-                } else {
-                    messageText = "Извините, но такую команду не знаю!";
-                }
-                SendMessage message = new SendMessage(update.message().chat().id(), messageText);
-                telegramBot.execute(message);
+                answer(update);
             } else {
                 saveEntity(update);
             }
@@ -57,9 +50,20 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
     }
 
+    // Отправляет сообщение на команду /start или если не распознал команду
+    private void answer(Update update) {
+        String messageText;
+        if (update.message().text().equals("/start")) {
+            messageText = "Приветстую! Я бот, который будет напоминать вам о делах. Например введите 01.01.2022 20:00 Сделать домашнюю работу. В 20:00 1 января 2022 года я пришлю вам напоминание с текстом “Сделать домашнюю работу” ";
+        } else {
+            messageText = "Извините, но такую команду не знаю!";
+        }
+        SendMessage message = new SendMessage(update.message().chat().id(), messageText);
+        telegramBot.execute(message);
+    }
+
     // Сохраняет корректную запись в БД. При некорректном вводе отправляет сообщение "Запись введена не корректно"
     private void saveEntity(Update update) {
-        logger.info("Processing update: {}", update);
         String messageText = update.message().text();
         if(!(messageText == null)) {
             NotificationTask notificationTask = new NotificationTask();
