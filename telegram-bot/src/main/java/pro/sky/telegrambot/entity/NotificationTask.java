@@ -3,7 +3,7 @@ package pro.sky.telegrambot.entity;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-// Сущьность для хранения в БД
+// Сущность для хранения в БД
 @Entity
 @Table
 public class NotificationTask {

@@ -8,7 +8,8 @@ CREATE TABLE notification_task(
     date_time   TIMESTAMP
 );
 
--- SERIAL использовал, потому что не работает с другими. Так-то и TIMESTAMP здесь потому что не работает DATETIME
+-- SERIAL использовал, потому что не работает с другими. TIMESTAMP здесь потому что не работает DATETIME
+
 
 
 

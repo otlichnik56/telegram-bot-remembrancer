@@ -1,4 +1,4 @@
-# Запускает запрос SQL table-work.sql
+# Запуск запрос SQL
 
 databaseChangeLog:
   - include:

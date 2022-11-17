@@ -6,7 +6,6 @@ import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import pro.sky.telegrambot.entity.NotificationTask;
 import pro.sky.telegrambot.repository.NotificationTaskRepository;
@@ -14,7 +13,6 @@ import pro.sky.telegrambot.repository.NotificationTaskRepository;
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -57,18 +55,6 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
             }
         });
         return UpdatesListener.CONFIRMED_UPDATES_ALL;
-    }
-
-    @Scheduled(cron = "0 0/1 * * * *")
-    public void run() {
-        LocalDateTime localDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-        List<NotificationTask> result = notificationTaskRepository.getNotificationTaskNowDateTime(localDateTime);
-        if (!(result == null)){
-            for (NotificationTask notificationTask : result) {
-                SendMessage message = new SendMessage(notificationTask.getChatId(), notificationTask.getMessage());
-                telegramBot.execute(message);
-            }
-        }
     }
 
     // Сохраняет корректную запись в БД. При некорректном вводе отправляет сообщение "Запись введена не корректно"
