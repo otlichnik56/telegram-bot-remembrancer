@@ -13,6 +13,7 @@ import pro.sky.telegrambot.repository.NotificationTaskRepository;
 import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -70,13 +71,24 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
             notificationTask.setChatId(update.message().chat().id());
             notificationTask.setMessage(parsingString(messageText));
             notificationTask.setDateTime(parsingDate(messageText));
-            if(parsingString(messageText) == null || parsingDate(messageText) == null){
+            if(notificationTask.getDateTime() == null || notificationTask.getMessage() == null){
                 SendMessage message = new SendMessage(update.message().chat().id(), "Запись введена не корректно");
                 telegramBot.execute(message);
             } else {
-                notificationTaskRepository.save(notificationTask);
+                LocalDateTime localDateTime = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
+                if (notificationTask.getDateTime().isBefore(localDateTime)) {
+                    SendMessage message = new SendMessage(update.message().chat().id(), "Дата напоминания прошла, введите запись с корректной датой и временем");
+                    telegramBot.execute(message);
+                } else {
+                    notificationTaskRepository.save(notificationTask);
+                }
             }
         }
+    }
+
+    private void checkEntity(NotificationTask notificationTask) {
+
+
     }
 
     // Парсит строку. Получает дату и время. При некорректном вводе записи возвращает null
