@@ -25,9 +25,9 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     private final Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
     private final TelegramBot telegramBot;
     private final NotificationTaskRepository notificationTaskRepository;
+    private static Pattern pattern = Pattern.compile("([0-9\\.\\:\\s]{16})(\\s)([\\W+]+)");
+    private static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
-
-    // Хотел порефачить код, но времени до сдачи почти нет, займусь этим потом!!!!! Главное всё работает!
     public TelegramBotUpdatesListener(NotificationTaskRepository notificationTaskRepository, TelegramBot telegramBot) {
         this.notificationTaskRepository = notificationTaskRepository;
         this.telegramBot = telegramBot;
@@ -74,12 +74,13 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     // Сохраняет корректную запись в БД. При некорректном вводе отправляет сообщение "Запись введена не корректно"
     private void saveEntity(Update update) {
         logger.info("Processing update: {}", update);
-        if(!(update.message().text() == null)) {
+        String messageText = update.message().text();
+        if(!(messageText == null)) {
             NotificationTask notificationTask = new NotificationTask();
             notificationTask.setChatId(update.message().chat().id());
-            notificationTask.setMessage(parsingString(update.message().text()));
-            notificationTask.setDateTime(parsingDate(update.message().text()));
-            if(parsingString(update.message().text()) == null || parsingDate(update.message().text()) == null){
+            notificationTask.setMessage(parsingString(messageText));
+            notificationTask.setDateTime(parsingDate(messageText));
+            if(parsingString(messageText) == null || parsingDate(messageText) == null){
                 SendMessage message = new SendMessage(update.message().chat().id(), "Запись введена не корректно");
                 telegramBot.execute(message);
             } else {
@@ -90,20 +91,18 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
 
     // Парсит строку. Получает дату и время. При некорректном вводе записи возвращает null
     private LocalDateTime parsingDate(String messageText) {
-        Pattern pattern = Pattern.compile("([0-9\\.\\:\\s]{16})(\\s)([\\W+]+)");
         Matcher matcher = pattern.matcher(messageText);
         LocalDateTime date = null;
         if (matcher.matches()) {
-            date = LocalDateTime.parse(matcher.group(1), DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm"));
+            date = LocalDateTime.parse(matcher.group(1), dateTimeFormatter);
         }
         return date;
     }
 
     // Парсит строку. Получает строку. При некорректном вводе записи возвращает null
     private String parsingString(String messageText) {
-        Pattern pattern = Pattern.compile("([0-9\\.\\:\\s]{16})(\\s)([\\W+]+)");
         Matcher matcher = pattern.matcher(messageText);
-        String text = "";
+        String text = null;
         if (matcher.matches()) {
             text = matcher.group(3);
         }

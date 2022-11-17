@@ -3,17 +3,15 @@ package pro.sky.telegrambot.entity;
 import javax.persistence.*;
 import java.time.LocalDateTime;
 
-// Сущьность для хранения в БД. Пришлось заморочиться с названием колонок и генерацмей id
+// Сущьность для хранения в БД
 @Entity
-@Table(name = "notification_task")
+@Table
 public class NotificationTask {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @JoinColumn(name = "chat_id")
-    private long chatId;
+    private Long chatId;
     private String message;
-    @JoinColumn(name = "date_time")
     private LocalDateTime dateTime;
 
     public long getId() {
