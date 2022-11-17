@@ -24,8 +24,8 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
     private final Logger logger = LoggerFactory.getLogger(TelegramBotUpdatesListener.class);
     private final TelegramBot telegramBot;
     private final NotificationTaskRepository notificationTaskRepository;
-    private static Pattern pattern = Pattern.compile("([0-9\\.\\:\\s]{16})(\\s)([\\W+]+)");
-    private static DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+    private static final Pattern pattern = Pattern.compile("([0-9\\.\\:\\s]{16})(\\s)([\\W+]+)");
+    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     public TelegramBotUpdatesListener(NotificationTaskRepository notificationTaskRepository, TelegramBot telegramBot) {
         this.notificationTaskRepository = notificationTaskRepository;
@@ -84,11 +84,6 @@ public class TelegramBotUpdatesListener implements UpdatesListener {
                 }
             }
         }
-    }
-
-    private void checkEntity(NotificationTask notificationTask) {
-
-
     }
 
     // Парсит строку. Получает дату и время. При некорректном вводе записи возвращает null
