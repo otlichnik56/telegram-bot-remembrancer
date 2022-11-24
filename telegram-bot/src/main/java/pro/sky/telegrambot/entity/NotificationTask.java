@@ -1,7 +1,9 @@
 package pro.sky.telegrambot.entity;
 
 import javax.persistence.*;
+import java.rmi.server.UID;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 // Сущность для хранения в БД
 @Entity
@@ -22,7 +24,7 @@ public class NotificationTask {
         this.id = id;
     }
 
-    public long getChatId() {
+    public Long getChatId() {
         return chatId;
     }
 

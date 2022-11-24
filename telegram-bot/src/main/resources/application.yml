@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/studentTelegramBot
+    username: studentIvan
+    password: 24051989
+
+telegram.bot.token: 5677451056:AAHPLWlNdVP3_1fQUe3ijNU1tSor0ww969U
